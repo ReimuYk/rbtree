@@ -2,4 +2,6 @@ cmake_minimum_required(VERSION 3.16.2)
 
 project(rbtree)
 
-add_executable(main rbtree.c)
+add_definitions("-Wall -g")
+
+add_executable(main main.cpp rbtree.c)

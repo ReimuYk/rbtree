@@ -299,15 +299,3 @@ int rbtree_delete(RBTree *rbtree, void *key)
 
 	return 0;
 }
-
-/* usage */
-
-bool long_lt(void *k1, void *k2)
-{
-	return (long)k1 < (long)k2;
-}
-
-int main()
-{
-	RBTree *t = new_rbtree(long_lt);
-}
