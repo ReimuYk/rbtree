@@ -299,3 +299,35 @@ int rbtree_delete(RBTree *rbtree, void *key)
 
 	return 0;
 }
+
+int __black_height(RBNode *node)
+{
+	if (!node)
+		return 1;
+
+	int lheight = __black_height(node->left);
+	int rheight = __black_height(node->right);
+	assert(lheight == rheight);
+	if (node->color == RED) {
+		if (node->left && node->left->color == RED)
+			assert(0);
+		if (node->right && node->right->color == RED)
+			assert(0);
+		return lheight;
+	}
+	else if (node->color == BLACK)
+		return lheight + 1;
+	else
+		assert(0);
+}
+
+void check_is_rbtree(RBTree *rbtree)
+{
+	if (!rbtree->root)
+		return;
+	if (rbtree->root->color != BLACK)
+		assert(0);
+
+	assert(__black_height(rbtree->root->left) == __black_height(rbtree->root->right));
+	printf("check passed\n");
+}

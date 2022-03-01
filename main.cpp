@@ -24,6 +24,7 @@ int main()
 
     int i = 0;
     while (true) {
+        check_is_rbtree(t);
         int op = rand() % 5;
         cout << i++ << '\t' << op << endl;
         if (op == 0) {

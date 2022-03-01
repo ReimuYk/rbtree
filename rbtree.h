@@ -85,6 +85,9 @@ void rbtree_insert(RBTree *rbtree, RBNode *new_node);
 RBNode *rbtree_get(RBTree *rbtree, void *key);
 int rbtree_delete(RBTree *rbtree, void *key);
 
+/* for correctness check */
+void check_is_rbtree(RBTree *rbtree);
+
 #ifdef __cplusplus
 }
 #endif
