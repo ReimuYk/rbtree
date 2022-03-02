@@ -136,7 +136,7 @@ void rbtree_insert(RBTree *rbtree, RBNode *new_node)
 	rbtree_balance(rbtree, new_node);
 }
 
-RBNode *rbtree_get(RBTree *rbtree, void *key)
+RBNode *rbtree_get(RBTree *rbtree, rbkey_t key)
 {
 	if (!rbtree->root)
 		return NULL;
@@ -268,9 +268,9 @@ static RBNode *swap_delete_node_to_leaf(RBTree *rbtree, RBNode *node)
 	return node; /* node is leaf */
 }
 
+/* The 3rd phase of delete */
 static void remove_leaf_node(RBTree *rbtree, RBNode *node)
 {
-	// TODO: free key and value
 	if (rbtree->root == node) {
 		rbtree->root = NULL;
 		return;
@@ -287,7 +287,7 @@ static void remove_leaf_node(RBTree *rbtree, RBNode *node)
 	}
 }
 
-int rbtree_delete(RBTree *rbtree, void *key)
+int rbtree_delete(RBTree *rbtree, rbkey_t key)
 {
 	RBNode *to_del = rbtree_get(rbtree, key);
 	if (!to_del)

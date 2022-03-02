@@ -8,15 +8,15 @@
 
 using namespace std;
 
-bool long_lt(void *k1, void *k2)
+bool cmp(rbkey_t k1, rbkey_t k2)
 {
-    bool ret = (reinterpret_cast<long>(k1) < reinterpret_cast<long>(k2));
+    bool ret = (reinterpret_cast<rbkey_t>(k1) < reinterpret_cast<rbkey_t>(k2));
 	return ret;
 }
 
 int main()
 {
-	RBTree *t = new_rbtree(long_lt);
+	RBTree *t = new_rbtree(cmp);
     RBNode *n;
     map<long, long> answer;
 
@@ -29,8 +29,8 @@ int main()
         cout << i++ << '\t' << op << endl;
         if (op == 0) {
             /* random insert */
-            int key = rand() % 0x10000;
-            int value = rand() % 0x20000;
+            long key = rand() % 0x10000;
+            long value = rand() % 0x20000;
             auto it = answer.find(key);
             if (it == answer.end()) {
                 answer[key] = value;
@@ -38,7 +38,7 @@ int main()
                 continue;
             }
 
-            n = new_rbnode(reinterpret_cast<void *>(key), reinterpret_cast<void *>(value));
+            n = new_rbnode(reinterpret_cast<rbkey_t>(key), reinterpret_cast<rbvalue_t>(value));
             rbtree_insert(t, n);
         } else if (op == 1) {
             /* random get exists */
@@ -48,19 +48,19 @@ int main()
             for (int k = 0; k < (rand() % (answer.size() - 1)); ++k) {
                 ++it;
             }
-            n = rbtree_get(t, reinterpret_cast<void *>(it->first));
+            n = rbtree_get(t, reinterpret_cast<rbkey_t>(it->first));
             assert(n);
             assert(reinterpret_cast<long>(n->value) == it->second);
         } else if (op == 2) {
             /* random get */
-            int key = rand() % 0x10000;
+            long key = rand() % 0x10000;
             auto it = answer.find(key);
             if (it != answer.end()) {
-                n = rbtree_get(t, reinterpret_cast<void *>(key));
+                n = rbtree_get(t, reinterpret_cast<rbkey_t>(key));
                 assert(n);
                 assert(reinterpret_cast<long>(n->value) == it->second);
             } else {
-                n = rbtree_get(t, reinterpret_cast<void *>(key));
+                n = rbtree_get(t, reinterpret_cast<rbkey_t>(key));
                 assert(!n);
             }
         } else if (op == 3) {
@@ -71,23 +71,23 @@ int main()
             for (int k = 0; k < (rand() % (answer.size() - 1)); ++k) {
                 ++it;
             }
-            n = rbtree_get(t, reinterpret_cast<void *>(it->first));
+            n = rbtree_get(t, reinterpret_cast<rbkey_t>(it->first));
             assert(n);
             assert(reinterpret_cast<long>(n->value) == it->second);
-            assert(rbtree_delete(t, reinterpret_cast<void *>(it->first)) == 0);
+            assert(rbtree_delete(t, reinterpret_cast<rbkey_t>(it->first)) == 0);
             answer.erase(it);
         } else if (op == 4) {
             /* random delete */
-            int key = rand() % 0x10000;
+            long key = rand() % 0x10000;
             auto it = answer.find(key);
             if (it != answer.end()) {
-                n = rbtree_get(t, reinterpret_cast<void *>(key));
+                n = rbtree_get(t, reinterpret_cast<rbkey_t>(key));
                 assert(n);
                 assert(reinterpret_cast<long>(n->value) == it->second);
-                assert(rbtree_delete(t, reinterpret_cast<void *>(it->first)) == 0);
+                assert(rbtree_delete(t, reinterpret_cast<rbkey_t>(it->first)) == 0);
                 answer.erase(it);
             } else {
-                n = rbtree_get(t, reinterpret_cast<void *>(key));
+                n = rbtree_get(t, reinterpret_cast<rbkey_t>(key));
                 assert(!n);
             }
         }

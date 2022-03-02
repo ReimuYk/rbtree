@@ -16,12 +16,15 @@ extern "C" {
 #define BLACK 1
 #define RED 0
 
-typedef bool (*rbnode_lt_t)(void *k1, void *k2);
+typedef long rbkey_t;
+typedef void * rbvalue_t;
+
+typedef bool (*rbnode_lt_t)(rbkey_t k1, rbkey_t k2);
 
 #ifdef __cplusplus
 	struct RBNode {
-		void *key;
-		void *value;
+		rbkey_t key;
+		rbvalue_t value;
 		RBNode *left;
 		RBNode *right;
 		RBNode *parent;
@@ -34,8 +37,8 @@ typedef bool (*rbnode_lt_t)(void *k1, void *k2);
 	};
 #else
 	struct _RBNode {
-		void *key;
-		void *value;
+		rbkey_t key;
+		rbvalue_t value;
 		struct _RBNode *left;
 		struct _RBNode *right;
 		struct _RBNode *parent;
@@ -56,7 +59,7 @@ static inline RBTree* new_rbtree(rbnode_lt_t rbnode_lt)
 	return ret;
 }
 
-static inline RBNode* new_rbnode(void *key, void *value)
+static inline RBNode* new_rbnode(rbkey_t key, rbvalue_t value)
 {
 	RBNode *ret = (RBNode *)malloc(sizeof(*ret));
 	ret->key = key;
@@ -70,20 +73,21 @@ static inline RBNode* new_rbnode(void *key, void *value)
 
 static inline void node_swap(RBNode *node1, RBNode *node2)
 {
-	void *tmp;
+	rbkey_t k;
+	rbvalue_t v;
 
-	tmp = node1->key;
+	k = node1->key;
 	node1->key = node2->key;
-	node2->key = tmp;
+	node2->key = k;
 
-	tmp = node1->value;
+	v = node1->value;
 	node1->value = node2->value;
-	node2->value = tmp;
+	node2->value = v;
 }
 
 void rbtree_insert(RBTree *rbtree, RBNode *new_node);
-RBNode *rbtree_get(RBTree *rbtree, void *key);
-int rbtree_delete(RBTree *rbtree, void *key);
+RBNode *rbtree_get(RBTree *rbtree, rbkey_t key);
+int rbtree_delete(RBTree *rbtree, rbkey_t key);
 
 /* for correctness check */
 void check_is_rbtree(RBTree *rbtree);
